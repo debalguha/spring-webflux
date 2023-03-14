@@ -67,7 +67,7 @@ public class OrderService {
                         .map(fromProductAndContext.apply(reqCtx)))
                 .map(makeTxnRequestDto)
                 .flatMap(reqCtx -> userClient.authorizeTransaction(reqCtx.getTransactionRequestDto()).map(transactionResponseToContext.apply(reqCtx)))
-                .map(toEntity.andThen(save).andThen(toDto))
+                .map(toEntity.andThen(save).andThen(toDto))// As the save is blocking, hence the following subscription is required!!
                 .subscribeOn(Schedulers.boundedElastic());
 
     }
